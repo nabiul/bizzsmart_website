@@ -1,0 +1,14 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Let the project root handle the homepage directly.
+    RewriteRule ^$ index.php [L]
+
+    # Serve Laravel assets through /public while keeping /public out of URLs.
+    RewriteRule ^public/ - [L]
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    DirectoryIndex public/index.php
+</IfModule>
