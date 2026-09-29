@@ -5,7 +5,12 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductAssistantController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('bizzsmart_website')->group(function () {
+$appPath = trim((string) (parse_url((string) config('app.url'), PHP_URL_PATH) ?: ''), '/');
+
+// Keep local sub-folder URLs working while allowing the same app to run at a
+// live domain root. For example, APP_URL=http://localhost/bizzsmart_website
+// uses the local prefix, while APP_URL=https://bizzsmart.xyz uses no prefix.
+Route::prefix($appPath)->group(function () {
     Route::get('/', function () {
         return view('home');
     })->name('home');
@@ -21,8 +26,16 @@ Route::prefix('bizzsmart_website')->group(function () {
         ->middleware('throttle:6,1')
         ->name('product-assistant.start');
 });
+//add a clear cache route for testing purposes
+Route::get('/clear', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    return "Cache cleared!";
+});
 
-Route::prefix('bizzsmart_website/admin')->name('admin.')->group(function () {
+Route::prefix(($appPath ? $appPath.'/' : '').'admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminController::class, 'login'])->name('login');
     Route::post('/login', [AdminController::class, 'authenticate'])->name('authenticate');
 
