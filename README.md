@@ -56,3 +56,15 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Product assistant setup
+
+The public “Ask BizzSmart” assistant is documentation-only. It uses the OpenAI Responses API `file_search` tool with a dedicated product knowledge vector store; it cannot access ERP users, transactions, purchase carts, or internal actions.
+
+For OpenAI, create a dedicated vector store and upload the product-only files from `Distibution_management/docs/support-agent/knowledge/`, then set `PRODUCT_AI_PROVIDER=openai`, `OPENAI_API_KEY` and `PRODUCT_AI_VECTOR_STORE_ID` in `.env`.
+
+For DeepSeek, set `PRODUCT_AI_PROVIDER=deepseek`, `DEEPSEEK_API_KEY`, and `PRODUCT_AI_DOCUMENTS_PATH=resources/ai-knowledge`. DeepSeek uses the local Markdown documentation directly.
+
+Run `php artisan config:clear` after changing these values and reload the website.
+
+Keep the vector store limited to public product documentation. Never upload customer records, credentials, private prompts, or operational ERP exports.

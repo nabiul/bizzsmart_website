@@ -72,3 +72,84 @@ document.querySelectorAll('.module-tabs button').forEach((button) => {
         feature.querySelector('ul').innerHTML = content.bullets.map((bullet) => `<li>${bullet}</li>`).join('');
     });
 });
+
+const assistant = document.querySelector('.product-assistant');
+const assistantToggle = assistant?.querySelector('.assistant-toggle');
+const assistantPanel = assistant?.querySelector('.assistant-panel');
+const assistantClose = assistant?.querySelector('.assistant-close');
+const assistantIntro = assistant?.querySelector('.assistant-intro');
+const assistantStartForm = assistant?.querySelector('.assistant-start-form');
+const assistantChat = assistant?.querySelector('.assistant-chat');
+const assistantForm = assistant?.querySelector('.assistant-form');
+const assistantMessages = assistant?.querySelector('.assistant-messages');
+let assistantConversationToken = '';
+
+const appendAssistantMessage = (text, role = 'bot') => {
+    const message = document.createElement('div');
+    message.className = `assistant-message assistant-message--${role}`;
+    message.textContent = text;
+    assistantMessages?.appendChild(message);
+    assistantMessages?.scrollTo({ top: assistantMessages.scrollHeight, behavior: 'smooth' });
+    return message;
+};
+
+assistantToggle?.addEventListener('click', () => {
+    const open = !assistantPanel.hidden;
+    assistantPanel.hidden = open;
+    assistantToggle.setAttribute('aria-expanded', String(!open));
+});
+
+assistantClose?.addEventListener('click', () => {
+    assistantPanel.hidden = true;
+    assistantToggle?.setAttribute('aria-expanded', 'false');
+});
+
+assistantStartForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const submit = assistantStartForm.querySelector('button');
+    submit.disabled = true;
+    const formData = Object.fromEntries(new FormData(assistantStartForm).entries());
+    try {
+        const response = await fetch(assistantStartForm.dataset.endpoint, {
+            method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '' }, body: JSON.stringify(formData),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Please check your details.');
+        assistantConversationToken = data.conversation_token;
+        assistantIntro.hidden = true;
+        assistantChat.hidden = false;
+        assistantChat.querySelector('input[name="message"]')?.focus();
+    } catch (error) {
+        alert(error.message || 'Unable to start conversation.');
+    } finally { submit.disabled = false; }
+});
+
+assistantForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const input = assistantForm.querySelector('input');
+    const submit = assistantForm.querySelector('button');
+    const message = input.value.trim();
+    if (!message) return;
+    appendAssistantMessage(message, 'user');
+    input.value = '';
+    input.disabled = true;
+    submit.disabled = true;
+    const pending = appendAssistantMessage('Thinking…');
+    try {
+        const response = await fetch(assistantForm.dataset.endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '' },
+            body: JSON.stringify({ message, conversation_token: assistantConversationToken }),
+        });
+        const data = await response.json();
+        pending.remove();
+        appendAssistantMessage(response.ok ? data.answer : (data.message || 'Please try again later.'));
+    } catch {
+        pending.remove();
+        appendAssistantMessage('I could not connect right now. Please email contact@bizzsmart.xyz or call/WhatsApp +88 01976729816.');
+    } finally {
+        input.disabled = false;
+        submit.disabled = false;
+        input.focus();
+    }
+});

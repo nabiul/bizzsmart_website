@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="BizzSmart ERP connects sales, inventory, finance, payroll, customers and field teams in one powerful business platform.">
     <meta name="theme-color" content="#071229">
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/bizzsmart-logo.svg') }}">
@@ -200,7 +201,7 @@
 
             <section class="cta-section" id="contact">
                 <div class="container cta-grid">
-                    <div class="cta-copy reveal"><div class="kicker light">Let’s build a smarter business</div><h2>Your next stage of growth starts with <span>clarity.</span></h2><p>Tell us a little about your operation. We’ll show you exactly how BizzSmart can bring your sales, stock, finance and people together.</p><div class="cta-points"><span><i>✓</i> Personalized product walkthrough</span><span><i>✓</i> No obligation, no generic sales pitch</span><span><i>✓</i> Practical answers from an ERP specialist</span></div><div class="direct-contact"><a href="mailto:contact@bizzsmart.xyz"><small>Email us</small><strong>contact@bizzsmart.xyz</strong></a><a href="https://wa.me/8801976729816" target="_blank" rel="noopener"><small>WhatsApp</small><strong>+88 01976729816</strong></a></div></div>
+                    <div class="cta-copy reveal"><div class="kicker light">Let’s build a smarter business</div><h2>Your next stage of growth starts with <span>clarity.</span></h2><p>Tell us a little about your operation. We’ll show you exactly how BizzSmart can bring your sales, stock, finance and people together.</p><div class="cta-points"><span><i>✓</i> Personalized product walkthrough</span><span><i>✓</i> No obligation, no generic sales pitch</span><span><i>✓</i> Practical answers from an ERP specialist</span></div><div class="direct-contact"><a href="mailto:contact@bizzsmart.xyz"><small>Email us</small><strong>contact@bizzsmart.xyz</strong></a><a href="tel:+8801976729816"><small>Call us</small><strong>+88 01976729816</strong></a><a href="https://wa.me/8801976729816" target="_blank" rel="noopener"><small>WhatsApp</small><strong>+88 01976729816</strong></a></div></div>
                     <div class="contact-card reveal delay-1">
                         @if(session('success'))<div class="success-message">✓ {{ session('success') }}</div>@endif
                         @if($errors->any())<div class="error-message">Please review the highlighted fields and try again.</div>@endif
@@ -215,10 +216,19 @@
                     </div>
                 </div>
             </section>
+            <aside class="product-assistant" id="product-assistant" aria-label="BizzSmart product assistant">
+                <button class="assistant-toggle" type="button" aria-expanded="false" aria-controls="assistant-panel"><span>✦</span> Ask BizzSmart</button>
+                <div class="assistant-panel" id="assistant-panel" hidden>
+                    <div class="assistant-head"><div><small>PRODUCT ASSISTANT</small><strong>Ask about BizzSmart</strong></div><button class="assistant-close" type="button" aria-label="Close assistant">×</button></div>
+                    <div class="assistant-intro"><p>Before we start, tell us who you are. Your conversation will be saved so our team can follow up.</p><form class="assistant-start-form" data-endpoint="{{ route('product-assistant.start') }}"><input name="name" type="text" placeholder="Your name" required><input name="email" type="email" placeholder="Work email" required><input name="phone" type="tel" placeholder="Phone / WhatsApp" required><input name="company" type="text" placeholder="Company (optional)"><button type="submit">Start conversation</button></form></div>
+                    <div class="assistant-chat" hidden><div class="assistant-messages" aria-live="polite"><div class="assistant-message assistant-message--bot">Hi! Ask me about BizzSmart modules, workflows or supported industries.</div></div><form class="assistant-form" data-endpoint="{{ route('product-assistant.ask') }}"><input name="message" type="text" maxlength="1200" placeholder="e.g. Does it support payroll?" autocomplete="off" required><button type="submit" aria-label="Send question">→</button></form></div>
+                    <small class="assistant-note">Answers are based on BizzSmart product documentation.</small>
+                </div>
+            </aside>
         </main>
 
         <footer>
-            <div class="container footer-main"><div class="footer-brand"><a class="brand" href="#top"><img class="brand-logo" src="{{ asset('images/bizzsmart-logo.svg') }}" alt=""><span>Bizz<span>Smart</span></span></a><p>The connected business platform built to help ambitious companies operate with clarity and grow with confidence.</p></div><div><h4>Platform</h4><a href="#platform">Sales & CRM</a><a href="#platform">Inventory</a><a href="#platform">Finance</a><a href="#platform">HR & Payroll</a></div><div><h4>Solutions</h4><a href="#solutions">Retail</a><a href="#solutions">Distribution</a><a href="#solutions">Wholesale</a><a href="#solutions">Field teams</a></div><div><h4>Get started</h4><a href="#contact">Book a demo</a><a href="#contact">Talk to sales</a><a href="#mobile">Mobile app</a><a href="mailto:contact@bizzsmart.xyz">contact@bizzsmart.xyz</a><a href="https://wa.me/8801976729816" target="_blank" rel="noopener">WhatsApp: +88 01976729816</a></div></div>
+            <div class="container footer-main"><div class="footer-brand"><a class="brand" href="#top"><img class="brand-logo" src="{{ asset('images/bizzsmart-logo.svg') }}" alt=""><span>Bizz<span>Smart</span></span></a><p>The connected business platform built to help ambitious companies operate with clarity and grow with confidence.</p></div><div><h4>Platform</h4><a href="#platform">Sales & CRM</a><a href="#platform">Inventory</a><a href="#platform">Finance</a><a href="#platform">HR & Payroll</a></div><div><h4>Solutions</h4><a href="#solutions">Retail</a><a href="#solutions">Distribution</a><a href="#solutions">Wholesale</a><a href="#solutions">Field teams</a></div><div><h4>Get started</h4><a href="#contact">Book a demo</a><a href="#contact">Talk to sales</a><a href="#mobile">Mobile app</a><a href="mailto:contact@bizzsmart.xyz">Email: contact@bizzsmart.xyz</a><a href="tel:+8801976729816">Call: +88 01976729816</a><a href="https://wa.me/8801976729816" target="_blank" rel="noopener">WhatsApp: +88 01976729816</a></div></div>
             <div class="container footer-bottom"><span>© {{ date('Y') }} BizzSmart. All rights reserved.</span><span>Made for businesses ready to grow.</span></div>
         </footer>
     </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DemoRequest;
+use App\Models\ProductAssistantConversation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -55,6 +56,19 @@ class AdminController extends Controller
             'requests' => $query->paginate(12)->withQueryString(),
             'totalRequests' => DemoRequest::count(),
             'todayRequests' => DemoRequest::whereDate('created_at', today())->count(),
+        ]);
+    }
+
+    public function assistantConversations(Request $request): View
+    {
+        $conversations = ProductAssistantConversation::query()
+            ->with('messages')
+            ->latest('last_message_at')
+            ->paginate(15);
+
+        return view('admin.assistant-conversations', [
+            'conversations' => $conversations,
+            'totalConversations' => ProductAssistantConversation::count(),
         ]);
     }
 
