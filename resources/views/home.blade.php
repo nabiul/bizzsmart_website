@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="canonical" href="{{ route('home') }}">
     <meta name="description" content="BizzSmart ERP connects sales, inventory, finance, payroll, customers and field teams in one powerful business platform.">
     <meta name="theme-color" content="#071229">
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/bizzsmart-logo.svg') }}">
@@ -11,6 +12,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <script type="application/ld+json">{!! json_encode(["\x40context"=>'https://schema.org',"\x40graph"=>[
+        ["\x40type"=>'Organization',"\x40id"=>url('/').'#organization','name'=>'BizzSmart','url'=>url('/'),'logo'=>asset('images/bizzsmart-logo.svg'),'email'=>'contact@bizzsmart.xyz','telephone'=>'+8801976729816'],
+        ["\x40type"=>'SoftwareApplication','name'=>'BizzSmart ERP','applicationCategory'=>'BusinessApplication','operatingSystem'=>'Web, Android','description'=>'BizzSmart ERP connects sales, inventory, finance, payroll, customers and field teams in one powerful business platform.','url'=>url('/'),'publisher'=>["\x40id"=>url('/').'#organization']],
+        ["\x40type"=>'Product','name'=>'BizzSmart ERP','brand'=>["\x40type"=>'Brand','name'=>'BizzSmart'],'description'=>'Connected ERP software for retail, distribution, wholesale, manufacturing, restaurants and filling stations.','url'=>url('/')],
+    ]], JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) !!}</script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>

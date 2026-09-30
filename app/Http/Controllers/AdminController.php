@@ -6,6 +6,7 @@ use App\Models\DemoRequest;
 use App\Models\ProductAssistantConversation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
 
 class AdminController extends Controller
@@ -86,5 +87,12 @@ class AdminController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('admin.login');
+    }
+
+    public function clearCaches(): RedirectResponse
+    {
+        Artisan::call('optimize:clear');
+
+        return redirect()->route('admin.dashboard')->with('success', 'Application caches cleared successfully.');
     }
 }
